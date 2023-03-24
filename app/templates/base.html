@@ -6,6 +6,7 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -54,9 +55,16 @@
 
     {% block page_content %}{% endblock %}
 </div>
+
+<div id="footer">
+    <p>&copy; 2023 All rights reserved</p>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
 {% endblock %}
+
+
