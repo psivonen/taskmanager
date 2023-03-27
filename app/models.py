@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from flask_login import UserMixin
 from . import db, login_manager
@@ -33,7 +33,8 @@ class User(UserMixin, db.Model):
 
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': self.id}).decode('utf-8')
+        return s.dumps({'confirm': self.id}).encode('utf-8')
+
 
     def confirm(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
