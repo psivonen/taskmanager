@@ -12,34 +12,15 @@ class Role(db.Model):
     default = db.Column(db.Boolean, default=False, index=True)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
-    def __repr__(self):
-        return '<Role %r>' % self.name
-
-    @staticmethod
-    def insert_roles():
-        roles = {
-            'User',
-            'Moderator',
-            'Administrator'
-        }
-        default_role = 'User'
-        for r in roles:
-            role = Role.query.filter_by(name=r).first()
-            if role is None:
-                role = Role(name=r)
-            role.reset_permissions()
-            for perm in roles[r]:
-                role.add_permission(perm)
-            role.default = (role.name == default_role)
-            db.session.add(role)
-        db.session.commit()
+    def __str__(self):
+        return self.name
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default='3')
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     
