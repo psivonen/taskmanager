@@ -1,5 +1,7 @@
 import os
+from dotenv import load_dotenv
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config:
@@ -25,6 +27,15 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
+class LocalConfig(Config):
+    DEBUG = True
+    DB_USERNAME = os.environ.get('LOCAL_DB_USERNAME')
+    DB_PASSWORD = os.environ.get('LOCAL_DB_PASSWORD')
+    DB_NAME = os.environ.get('LOCAL_DB_NAME')
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@localhost:3306/' + DB_NAME
+    # SQLALCHEMY_ECHO = True (dokumentaatio)
+    SQLALCHEMY_ECHO = "debug"
+    # WTF_CSRF_ENABLED = False
 
 class TestingConfig(Config):
     TESTING = True
@@ -41,6 +52,6 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
+    'local': LocalConfig,
     'default': DevelopmentConfig
 }
