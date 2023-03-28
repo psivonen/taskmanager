@@ -3,6 +3,8 @@ from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from flask_login import UserMixin
 from . import db, login_manager
+
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
@@ -12,6 +14,26 @@ class Role(db.Model):
 
     def __repr__(self):
         return '<Role %r>' % self.name
+
+    @staticmethod
+    def insert_roles():
+        roles = {
+            'User',
+            'Moderator',
+            'Administrator'
+        }
+        default_role = 'User'
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if role is None:
+                role = Role(name=r)
+            role.reset_permissions()
+            for perm in roles[r]:
+                role.add_permission(perm)
+            role.default = (role.name == default_role)
+            db.session.add(role)
+        db.session.commit()
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +42,14 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
+    
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == current_app.config['FLASKY_ADMIN']:
+                self.role = Role.query.filter_by(name='Administrator').first()
+        if self.role is None:
+            self.role = Role.query.filter_by(default=True).first()
 
     @property
     def password(self):
@@ -35,7 +65,6 @@ class User(UserMixin, db.Model):
     def generate_confirmation_token(self):
         s = Serializer(current_app.config['SECRET_KEY'])
         return s.dumps({'confirm': self.id}).encode('utf-8')
-
 
     def confirm(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
