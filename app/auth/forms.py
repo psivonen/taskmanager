@@ -7,10 +7,10 @@ from ..models import User
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-                                             Email()], render_kw={"class": "form-control"})
-    password = PasswordField('Password', validators=[DataRequired()], render_kw={"class": "form-control"})
+                                             Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
-    submit = SubmitField('Log In', render_kw={"class": "btn btn-primary"})
+    submit = SubmitField('Log In')
 
 
 class RegistrationForm(FlaskForm):
