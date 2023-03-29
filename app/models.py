@@ -12,8 +12,8 @@ class Role(db.Model):
     default = db.Column(db.Boolean, default=False, index=True)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
-    def __str__(self):
-        return self.name
+    def __repr__(self):
+        return '<Role %r>' % self.name
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
