@@ -48,13 +48,6 @@ def logout():
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
 
-@auth.route('/kayttajat')
-@login_required
-def kayttajat():
-    all_users = User.query.all()
-    return render_template('auth/kayttajat.html', users=all_users)
-
-
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
