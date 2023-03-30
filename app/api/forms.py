@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import EmailField
+from wtforms.validators import Email, DataRequired
 
 
-class NameForm(FlaskForm):
-    name = StringField('What is your name?', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+class EmailForm(FlaskForm):
+    email = EmailField('', validators=[DataRequired(), Email()])
