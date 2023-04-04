@@ -8,6 +8,10 @@ from ..models import User
 def index():
     return render_template('index.html')
 
+@login_required
+@main.route('/')
+def dashboard():
+    return render_template('dashboard.html')
 
 @login_required
 @main.route('/users')

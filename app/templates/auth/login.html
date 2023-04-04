@@ -4,10 +4,9 @@
 {% block title %}Sovellusmalli - Login{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
+<div class="container-fluid d-flex align-items-center min-vh-100">
+    <div class="col-md-4">
     <h1>Login</h1>
-</div>
-<div class="col-md-4">
     {{ wtf.render_form(form, extra_classes='needs-validation', novalidate=True) }}
     <br>
     <p>Forgot your password? <a href="{{ url_for('auth.password_reset_request') }}">Click here to reset it</a>.</p>

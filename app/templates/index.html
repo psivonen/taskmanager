@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}Sovellusmalli{% endblock %}
+{% block title %}TaskManager{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+<div class="container-fluid d-flex align-items-center min-vh-100">
+    <div class="row justify-content-md-center align-items-md-center">
+        <div class="col-md-5">
+            <h1>Pistä elämäsi järjestykseen.
+            </h1>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
+                ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+            </p>
+            <a class="custom-btn-link" href="{{ url_for('auth.register') }}">Luo tili</a>
+        </div>
+        <div class="col-md-6">
+            <img src="{{ url_for('static', filename='task_management.jpg') }}">
+        </div>
+    </div>
 </div>
+
 {% endblock %}

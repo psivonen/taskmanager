@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Mulish', sans-serif;
+}
+
+h1 {
+    font-weight: 700;
+    font-family: 'Montserrat';
+    font-size: 3rem;
+}
+
+h1, p {
+    padding-bottom: 20px;
+}
+
+p {
+    line-height: 30px;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    color: #333333;
+    z-index: 10;
+    background-color: white;
+}
+
+.pagination {
+    max-width: 100%;
+    text-align: right;
+    padding: 0px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.custom-pagination .page-link {
+    color:#333333;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #333333;
+    border-color: #333333;
+    color: white;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+    color: #999;
+}
+
+.navbar {
+    padding: 15px;
+}
+
+.nav-link {
+    margin-left: 10px;
+}
+
+.custom-btn-link {
+    background-color: #8848EF;
+    color: white;
+    padding: 10px 40px !important;
+    border-radius: 25px;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
