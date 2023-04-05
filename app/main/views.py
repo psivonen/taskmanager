@@ -9,7 +9,7 @@ def index():
     return render_template('index.html')
 
 @login_required
-@main.route('/')
+@main.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
 
