@@ -14,6 +14,11 @@ def dashboard():
     return render_template('dashboard.html')
 
 @login_required
+@main.route('/tasks')
+def tasks():
+    return render_template('tasks.html')
+
+@login_required
 @main.route('/users')
 def users():
     # users = User.query.order_by(User.username).all()
