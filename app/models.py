@@ -20,17 +20,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default='3')
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default='1')
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
-    
-    def __init__(self, **kwargs):
-        super(User, self).__init__(**kwargs)
-        if self.role is None:
-            if self.email == current_app.config['FLASKY_ADMIN']:
-                self.role = Role.query.filter_by(name='Administrator').first()
-        if self.role is None:
-            self.role = Role.query.filter_by(default=True).first()
 
     @property
     def password(self):

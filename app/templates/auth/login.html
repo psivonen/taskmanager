@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% import "bootstrap5/form.html" as wtf %}
 
-{% block title %}Sovellusmalli - Login{% endblock %}
+{% block title %}TaskManager - Kirjaudu{% endblock %}
 
 {% block page_content %}
-<div class="container-fluid d-flex align-items-center min-vh-100">
-    <div class="col-md-4">
-    <h1>Login</h1>
-    {{ wtf.render_form(form, extra_classes='needs-validation', novalidate=True) }}
-    <br>
-    <p>Forgot your password? <a href="{{ url_for('auth.password_reset_request') }}">Click here to reset it</a>.</p>
-    <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+<div class="row justify-content-center align-items-center"> 
+    <div class="col">
+        <h1>Kirjaudu sisään</h1>
+        {{ wtf.render_form(form, extra_classes='needs-validation', novalidate=True) }}
+        <br>
+        <p>Unohditko salasanasi? <a href="{{ url_for('auth.password_reset_request') }}">Klikkaa tästä</a>.
+            <br>Uusi käyttäjä? <a href="{{ url_for('auth.register') }}">Rekisteröidy tästä</a>.
+        </p>
+    </div>
 </div>
 {% endblock %}

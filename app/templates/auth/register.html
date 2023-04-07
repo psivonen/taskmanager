@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap5/form.html" as wtf %}
 
-{% block title %}Sovellusmalli - Register{% endblock %}
+{% block title %}TaskManager - Luo tili{% endblock %}
 
 {% block page_content %}
-<div class="container-fluid d-flex align-items-center min-vh-100">
-    <div class="col-md-4">
-    <h1>Register</h1>
-    {{ wtf.render_form(form, extra_classes='needs-validation', novalidate=True) }}
+    <div class="col-sm-5">
+        <h1>Register</h1>
+        {{ wtf.render_form(form, extra_classes='needs-validation', novalidate=True) }}
     </div>
-</div>
 {% endblock %}

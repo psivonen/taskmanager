@@ -5,6 +5,10 @@
   font-family: "Mulish", sans-serif;
 }
 
+body {
+  height: 100vh;
+}
+
 .body {
   position: relative;
   margin: 3rem 0 0 0;
@@ -20,6 +24,7 @@
 
 header {
     height: 3rem;
+    padding: 20px;
 }
 
 .header {
@@ -53,6 +58,10 @@ header {
   padding: 0.5rem 1rem 0 0;
   transition: 0.5s;
   z-index: 100;
+}
+
+.navbar a {
+  margin: 10px;
 }
 
 .nav {
@@ -192,6 +201,27 @@ img {
     max-width: 100%;
 }
 
+.row {
+  gap: 30px;
+}
+
+.container {
+  height: 95%;
+}
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+  }
+  .row {
+    gap: 20px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+}
+
 @media screen and (min-width: 768px) {
   .body {
     margin: calc(3rem + 1rem) 0 0 0;
@@ -225,5 +255,3 @@ img {
     padding-left: calc(68px + 188px);
   }
 }
-
-
