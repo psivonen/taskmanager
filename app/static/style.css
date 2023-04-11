@@ -110,7 +110,7 @@ header {
   font-size: 1.25rem;
 }
 
-.show {
+.showSidebar {
   left: 0;
 }
 
@@ -209,6 +209,60 @@ img {
   height: 95%;
 }
 
+.add-list-icon {
+  color: white;
+}
+
+.btn-custom {
+  background-color: #8848ef;
+  border-color:#8848ef;
+  color: white;
+  border-radius: 25px;
+  padding: 8px 25px;
+}
+
+.btn-custom:hover {
+  background-color: #222222;
+  color: white;
+}
+
+.btn-secondary {
+  border-radius: 25px;
+  padding: 8px 25px;
+  background-color: #999;
+  border-color:#999;
+}
+
+.custom-container {
+  padding-top: 35px;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-header, .modal-footer {
+  border: none;
+}
+
+.modal-header {
+  align-items: flex-start;
+}
+
+.modal-footer {
+  justify-content: flex-start;
+  padding-top: 20px;
+  padding-left: 0;
+}
+
+.modal-form {
+  margin: 0;
+}
+
+#taskRow {
+  margin-bottom: 10px;
+}
+
 @media screen and (max-width: 768px) {
   h1 {
     font-size: 28px;
@@ -247,7 +301,7 @@ img {
     padding: 1rem 1rem 0 0;
   }
 
-  .show {
+  .showSidebar {
     width: calc(68px + 156px);
   }
 

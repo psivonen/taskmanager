@@ -28,3 +28,13 @@ def users():
         error_out=False)
     users = pagination.items
     return render_template('users.html', users=users, pagination=pagination)
+
+@login_required
+@main.route('/tasks', methods=['POST'])
+def new_list():
+    listName = request.form['listName']
+    task = request.form['task']
+
+    # Do something with the form data
+
+    return render_template('tasks.html')

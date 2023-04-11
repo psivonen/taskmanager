@@ -28,21 +28,79 @@
     </header>
     <div class="l-navbar" id="nav-bar">
         <div class="nav">
-            <div> 
-                <a href="{{ url_for('main.dashboard') }}" class="nav-logo"> <i class='bx bx-check-double nav-logo-icon'></i> <span class="nav-logo-name">TaskManager</span> </a>
-                <div class="nav-list"> 
-                    <a href="{{ url_for('main.dashboard') }}" class="nav-link-custom {{ 'custom-active' if request.endpoint == 'main.dashboard' }}"><i class='bx bx-grid-alt nav-icon'></i> <span class="nav_name">Dashboard</span></a>
-                    <a href="{{ url_for('main.tasks') }}" class="nav-link-custom {{ 'custom-active' if request.endpoint == 'main.tasks' }}"><i class='bx bx-list-ul nav-icon'></i> <span class="nav_name">Tehtävälista</span></a>
-                    <a href="#" class="nav-link-custom"><i class='bx bx-box nav-icon'></i> <span class="nav-name">Arkisto</span></a>
+            <div>
+                <a href="{{ url_for('main.dashboard') }}" class="nav-logo"> <i
+                        class='bx bx-check-double nav-logo-icon'></i> <span class="nav-logo-name">TaskManager</span>
+                </a>
+                <div class="nav-list">
+                    <a href="#" class="nav-link-custom add-list-icon" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"><i class='bx bxs-plus-circle'></i> <span class="nav_name">Uusi
+                            lista</span></a>
+                    <a href="{{ url_for('main.dashboard') }}"
+                        class="nav-link-custom {{ 'custom-active' if request.endpoint == 'main.dashboard' }}"><i
+                            class='bx bx-grid-alt nav-icon'></i> <span class="nav_name">Dashboard</span></a>
+                    <a href="{{ url_for('main.tasks') }}"
+                        class="nav-link-custom {{ 'custom-active' if request.endpoint == 'main.tasks' }}"><i
+                            class='bx bx-list-ul nav-icon'></i> <span class="nav_name">Tehtävälista</span></a>
+                    <a href="#" class="nav-link-custom"><i class='bx bx-box nav-icon'></i> <span
+                            class="nav-name">Arkisto</span></a>
                 </div>
-            </div> 
-            <a href="{{ url_for('auth.logout') }}" class="nav-link-custom"> <i class='bx bx-log-out nav-icon'></i> <span class="nav-name">Ulos</span> </a>
+            </div>
+            <a href="{{ url_for('auth.logout') }}" class="nav-link-custom"> <i class='bx bx-log-out nav-icon'></i> <span
+                    class="nav-name">Ulos</span> </a>
         </div>
     </div>
 
-    <div class="col py-3">
-        {% block page_content %}{% endblock %}
+    <div class="container-fluid custom-container">
+        <div class="row">
+            <div class="col">
+                {% block page_content %}{% endblock %}
+            </div>
+        </div>
     </div>
+
+    {% block modals %}
+    <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Uusi tehtävälista</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('main.new_list') }}" class="modal-form">
+                        <div class="row mb-3">
+                            <label for="listName" class="col-sm-2 col-form-label">Listan nimi</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="listName" name="listName"
+                                    placeholder="Listan nimi">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="list-name" class="col-sm-2 col-form-label">Tehtävä</label>
+                            <div class="col-sm-6">
+                                <div id="taskFields">
+                                </div>
+                                <button type="button" class="btn btn-link-dark" id="addTask">+ Lisää tehtävä</button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="deadline" class="col-sm-2 col-form-label">Deadline</label>
+                            <div class="col-sm-6">
+                                <input type="date" class="form-control" id="deadline" name="deadline">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-custom">Luo lista</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Peruuta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
 
     {% block js %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
