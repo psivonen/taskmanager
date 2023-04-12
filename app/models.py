@@ -98,3 +98,17 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+class TodoList(db.Model):
+    __tablename__ = 'todo_lists'
+    id = db.Column(db.Integer, primary_key=True)
+    list_name = db.Column(db.String(255))
+    due_date = db.Column(db.Date, nullable=True, default=None)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    tasks = db.relationship('TodoItems', backref='todo_lists', lazy=True)
+
+class TodoItems(db.Model):
+    __tablename__ = 'todo_items'
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(255))
+    list_id = db.Column(db.Integer, db.ForeignKey('todo_lists.id'), nullable=False)

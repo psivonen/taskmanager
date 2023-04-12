@@ -44,7 +44,6 @@ def upgrade():
     op.create_table('todo_items',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('task', sa.String(length=255), nullable=True),
-    sa.Column('due_date', sa.Date(), nullable=True),
     sa.Column('list_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['list_id'], ['todo_lists.id'], ),
     sa.PrimaryKeyConstraint('id')

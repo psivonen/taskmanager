@@ -3,8 +3,22 @@
 {% block title %}Tehtävälistat{% endblock %}
 
 {% block page_content %}
-    <h1>Tehtävälistat</h1>
-    <p>Ei vielä tehtävälistoja...</p>
-    <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
-    </a>
+
+<h1>Tehtävälistat</h1>
+<button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
+
+{% for list_name, tasks in tasks_by_list.items() %}
+<div class="row">
+    <div class="col">
+        <h2>{{ list_name }}</h2>
+        <ul>
+            {% for task in tasks %}
+            <li>{{ task.task }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+
+
 {% endblock %}
