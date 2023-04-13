@@ -45,18 +45,18 @@ def new_list():
         db.session.add(new_list)
         db.session.commit()
 
-        # Add each item to the new to-do list
+        # Add each non-empty item to the new to-do list
         list_id = new_list.id
         tasks = request.form.getlist('tasks')
         for task in tasks:
-            new_item = TodoItems(task=task, list_id=list_id)
-            db.session.add(new_item)
+            if task.strip(): # Check if task is not empty after stripping whitespace
+                new_item = TodoItems(task=task, list_id=list_id)
+                db.session.add(new_item)
 
         db.session.commit()
 
         return redirect(url_for('main.tasks'))
     return render_template('tasks.html')
-
 
 
 @login_required
@@ -69,7 +69,8 @@ def tasks():
     # Create a dictionary that maps todo list names to their associated tasks
     tasks_by_list = {}
     for todo_list in todo_lists:
-        tasks_by_list[todo_list.list_name] = [task for task in tasks if task.list_id == todo_list.id]
+        tasks = [task for task in todo_list.tasks]
+        tasks_by_list[todo_list.list_name] = {'tasks': tasks, 'due_date': todo_list.due_date}
 
     # Pass the dictionary to the template
     return render_template('tasks.html', tasks_by_list=tasks_by_list)

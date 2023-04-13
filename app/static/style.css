@@ -267,6 +267,29 @@ img {
   align-items: flex-start;
 }
 
+.list-container {
+  margin: 40px 0;
+}
+
+.form-check-input:checked + .form-check-label {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.form-check {
+  line-height: 25px;
+}
+
+.task-container {
+  display: flex;
+  align-items: center;
+  width: 80%;
+}
+
+.card {
+  width: 30%;
+}
+
 @media screen and (max-width: 768px) {
   h1 {
     font-size: 28px;
@@ -278,6 +301,11 @@ img {
   .container {
     padding: 20px;
   }
+
+  .card {
+    width: 100%;
+  }
+  
 }
 
 @media screen and (min-width: 768px) {

@@ -7,18 +7,32 @@
 <h1>Tehtävälistat</h1>
 <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
 
-{% for list_name, tasks in tasks_by_list.items() %}
-<div class="row">
-    <div class="col">
-        <h2>{{ list_name }}</h2>
-        <ul>
-            {% for task in tasks %}
-            <li>{{ task.task }}</li>
-            {% endfor %}
-        </ul>
+<div class="container list-container">
+    <div class="row mb-3">
+        {% for list_name, list_info in tasks_by_list.items() %}
+        <div class="card px-0">
+            <div class="card-body">
+                <h5 class="card-title">{{ list_name }}</h5>
+                <div class="card-text task-list">
+                    {% for task in list_info.tasks %}
+                    <div class="form-check">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox" name="tasks[]" value="{{ task.id }}"
+                                id="task_{{ task.id }}">
+                            <label class="form-check-label" for="task_{{ task.id }}">{{ task.task }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if list_info.due_date %}
+            <div class="card-footer">
+                <small>Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</small>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
 </div>
-{% endfor %}
-
 
 {% endblock %}
