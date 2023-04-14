@@ -1,4 +1,4 @@
-from flask import render_template, request, current_app, redirect, url_for
+from flask import render_template, request, current_app, redirect, url_for, flash
 from . import main
 from flask_login import login_required, current_user
 from ..models import User, TodoList, TodoItems
@@ -25,6 +25,7 @@ def users():
     users = pagination.items
     return render_template('users.html', users=users, pagination=pagination)
 
+
 @login_required
 @main.route('/tasks', methods=['POST'])
 def new_list():
@@ -33,13 +34,7 @@ def new_list():
         # Create a new to-do list
         list_name = request.form['listName']
         due_date_str = request.form['deadline']
-        if due_date_str:
-            try:
-                due_date = datetime.strptime(due_date_str, '%Y-%m-%d').date()
-            except ValueError:
-                due_date = None
-        else:
-            due_date = None
+        due_date = datetime.strptime(due_date_str, '%Y-%m-%d') if due_date_str else None
 
         new_list = TodoList(list_name=list_name, due_date=due_date, user_id=user_id)
         db.session.add(new_list)
@@ -65,12 +60,53 @@ def tasks():
     # Query the current user's todo lists and associated tasks
     todo_lists = TodoList.query.filter_by(user_id=current_user.id).all()
     tasks = TodoItems.query.join(TodoList).filter(TodoList.user_id == current_user.id).all()
-
     # Create a dictionary that maps todo list names to their associated tasks
     tasks_by_list = {}
     for todo_list in todo_lists:
         tasks = [task for task in todo_list.tasks]
-        tasks_by_list[todo_list.list_name] = {'tasks': tasks, 'due_date': todo_list.due_date}
+        tasks_by_list[todo_list.list_name] = {'id': todo_list.id, 'tasks': tasks, 'due_date': todo_list.due_date}
 
     # Pass the dictionary to the template
     return render_template('tasks.html', tasks_by_list=tasks_by_list)
+
+@main.route('/tasks/edit/<int:list_id>', methods=['GET', 'POST'])
+def edit_list(list_id):
+    todo_list = TodoList.query.get_or_404(list_id)
+    if request.method == 'POST':
+        list_name = request.form['listName']
+        due_date_str = request.form['deadline']
+        due_date = datetime.strptime(due_date_str, '%Y-%m-%d') if due_date_str else None
+        tasks = request.form.getlist('tasks[]')
+        # Update task list
+        todo_list.list_name = list_name
+        todo_list.due_date = due_date
+        # Update tasks
+        existing_task_ids = [task.id for task in todo_list.tasks]
+        for i, task_name in enumerate(tasks):
+            if i < len(existing_task_ids):
+                task = TodoItems.query.get(existing_task_ids[i])
+                task.task = task_name
+            else:
+                task = TodoItems(task=task_name, list_id=todo_list.id)
+                db.session.add(task)
+
+        db.session.commit()
+
+        return redirect(url_for('main.tasks'))
+
+    return render_template('edit_list.html', todo_list=todo_list)
+
+
+@main.route('/tasks/delete/<int:task_id>', methods=['POST'])
+def delete_task(task_id):
+    task = TodoItems.query.get_or_404(task_id)
+    db.session.delete(task)
+    db.session.commit()
+    flash('Task deleted successfully')
+    return redirect(url_for('main.edit_list', list_id=task.list_id))
+
+
+
+
+
+

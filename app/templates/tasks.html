@@ -11,8 +11,11 @@
     <div class="row mb-3">
         {% for list_name, list_info in tasks_by_list.items() %}
         <div class="card px-0">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">{{ list_name }}</h5>
+                <a href="{{ url_for('main.edit_list', list_id=list_info.id) }}" class="btn btn-sm btn-outline-secondary">Muokkaa</a>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{ list_name }}</h5>
                 <div class="card-text task-list">
                     {% for task in list_info.tasks %}
                     <div class="form-check">
@@ -34,5 +37,6 @@
         {% endfor %}
     </div>
 </div>
+
 
 {% endblock %}

@@ -90,4 +90,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     taskIndex++;
   });
+
+  const deleteButtons = document.querySelectorAll('.delete-task');
+    deleteButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const taskId = button.getAttribute('data-task-id');
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/tasks/delete/' + taskId;
+        document.body.appendChild(form);
+        form.submit();
+      });
+    });
+
+    const addTaskButton = document.querySelector('.add-task');
+    addTaskButton.addEventListener('click', () => {
+      const taskList = addTaskButton.parentElement.parentElement;
+      const newTaskItem = document.createElement('li');
+      const newTaskInput = document.createElement('input');
+      newTaskInput.type = 'text';
+      newTaskInput.name = 'tasks[]';
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'delete-task';
+      deleteButton.innerText = 'Delete';
+      newTaskItem.appendChild(newTaskInput);
+      newTaskItem.appendChild(deleteButton);
+      taskList.appendChild(newTaskItem);
+      deleteButton.addEventListener('click', () => {
+        taskList.removeChild(newTaskItem);
+      });
+    });
+
 });
+
