@@ -1,26 +1,46 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const showNavbar = (toggleId, navId, bodyId, headerId) => {
-    const toggle = document.getElementById(toggleId),
-      nav = document.getElementById(navId),
-      bodypd = document.getElementById(bodyId),
-      headerpd = document.getElementById(headerId);
 
-    // Validate that all variables exist
-    if (toggle && nav && bodypd && headerpd) {
-      toggle.addEventListener("click", () => {
-        // show navbar
-        nav.classList.toggle("showSidebar");
-        // change icon
-        toggle.classList.toggle("bx-x");
-        // add padding to body
-        bodypd.classList.toggle("body-pd");
-        // add padding to header
-        headerpd.classList.toggle("body-pd");
+  // Get all the task list checkboxes
+  const checkboxes = document.querySelectorAll('.task-checkbox');
+  checkboxes.forEach((checkbox) => {
+    // Change input into checked and update completed column in database
+    checkbox.addEventListener('change', () => {
+      const taskId = checkbox.getAttribute('data-task-id');
+      const isChecked = checkbox.checked;
+      fetch('/tasks/complete/' + taskId, {
+        method: 'POST',
+        body: JSON.stringify({ completed: isChecked }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
       });
-    }
-  };
+    });
+  });
 
-  showNavbar("header-toggle", "nav-bar", "body-pd", "header");
+  const toggle = document.querySelector("#header-toggle");
+  const nav = document.querySelector("#nav-bar");
+  const bodypd = document.querySelector("#body-pd");
+  const headerpd = document.querySelector("#header");
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("showSidebar");
+    toggle.classList.toggle("bx-x");
+    bodypd.classList.toggle("body-pd");
+    headerpd.classList.toggle("body-pd");
+  });
+
   const remove_is_invalid = (event) => {
     let element = event.target;
     if (element.classList.contains("is-invalid")) {
@@ -91,36 +111,38 @@ document.addEventListener("DOMContentLoaded", function () {
     taskIndex++;
   });
 
-  const deleteButtons = document.querySelectorAll('.delete-task');
-    deleteButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const taskId = button.getAttribute('data-task-id');
-        const form = document.createElement('form');
-        form.method = 'post';
-        form.action = '/tasks/delete/' + taskId;
-        document.body.appendChild(form);
-        form.submit();
-      });
+  const deleteButtons = document.querySelectorAll(".delete-task");
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const taskId = button.getAttribute("data-task-id");
+      const form = document.createElement("form");
+      form.method = "post";
+      form.action = "/tasks/delete/" + taskId;
+      document.body.appendChild(form);
+      form.submit();
     });
+  });
 
-    const addTaskButton = document.querySelector('.add-task');
-    addTaskButton.addEventListener('click', () => {
-      const taskList = addTaskButton.parentElement.parentElement;
-      const newTaskItem = document.createElement('li');
-      const newTaskInput = document.createElement('input');
-      newTaskInput.type = 'text';
-      newTaskInput.name = 'tasks[]';
-      const deleteButton = document.createElement('button');
-      deleteButton.type = 'button';
-      deleteButton.className = 'delete-task';
-      deleteButton.innerText = 'Delete';
-      newTaskItem.appendChild(newTaskInput);
-      newTaskItem.appendChild(deleteButton);
-      taskList.appendChild(newTaskItem);
-      deleteButton.addEventListener('click', () => {
-        taskList.removeChild(newTaskItem);
-      });
+  const addTaskList = document.querySelector("#addTaskList");
+  const addTaskButton = document.querySelector(".add-task");
+  addTaskButton.addEventListener("click", () => {
+    const newTaskItem = document.createElement("div");
+    newTaskItem.setAttribute("id", "taskRow");
+    newTaskItem.classList.add("input-group");
+    const newTaskInput = document.createElement("input");
+    newTaskInput.setAttribute("type", "text");
+    newTaskInput.setAttribute("name", "tasks[]");
+    newTaskInput.classList.add("form-control");
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.innerText = "Poista";
+    deleteButton.classList.add("btn", "btn-outline-secondary");
+    newTaskItem.appendChild(newTaskInput);
+    newTaskItem.appendChild(deleteButton);
+    addTaskList.appendChild(newTaskItem);
+    deleteButton.addEventListener("click", () => {
+      addTaskList.removeChild(newTaskItem);
     });
-
+  });
+  
 });
-

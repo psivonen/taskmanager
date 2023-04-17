@@ -17,15 +17,17 @@
             </div>
             <div class="card-body">
                 <div class="card-text task-list">
+                    <form id="checklist-form" method="post">
                     {% for task in list_info.tasks %}
                     <div class="form-check">
-                        <div class="d-flex align-items-center">
-                            <input class="form-check-input me-2" type="checkbox" name="tasks[]" value="{{ task.id }}"
-                                id="task_{{ task.id }}">
-                            <label class="form-check-label" for="task_{{ task.id }}">{{ task.task }}</label>
+                        <div class="item-list d-flex align-items-center">
+                            <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]" value="{{ task.id }}"
+                                id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if task.completed %}checked{% endif %}>
+                            <label class="form-check-label task-checkbox-label" for="task_{{ task.id }}">{{ task.task }}</label>
                         </div>
                     </div>
                     {% endfor %}
+                    </form>
                 </div>
             </div>
             {% if list_info.due_date %}

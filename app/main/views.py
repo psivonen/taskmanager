@@ -1,4 +1,4 @@
-from flask import render_template, request, current_app, redirect, url_for, flash
+from flask import render_template, request, current_app, redirect, url_for, flash, jsonify
 from . import main
 from flask_login import login_required, current_user
 from ..models import User, TodoList, TodoItems
@@ -69,6 +69,19 @@ def tasks():
     # Pass the dictionary to the template
     return render_template('tasks.html', tasks_by_list=tasks_by_list)
 
+
+@main.route('/tasks/complete/<int:task_id>', methods=['POST'])
+def complete_task(task_id):
+    task = TodoItems.query.get_or_404(task_id)
+    completed = request.json.get('completed')
+    if completed is not None:
+        task.completed = completed
+        db.session.commit()
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'error': 'Missing "completed" parameter'})
+
+
 @main.route('/tasks/edit/<int:list_id>', methods=['GET', 'POST'])
 def edit_list(list_id):
     todo_list = TodoList.query.get_or_404(list_id)
@@ -104,9 +117,4 @@ def delete_task(task_id):
     db.session.commit()
     flash('Task deleted successfully')
     return redirect(url_for('main.edit_list', list_id=task.list_id))
-
-
-
-
-
 

@@ -271,7 +271,12 @@ img {
   margin: 40px 0;
 }
 
-.form-check-input:checked + .form-check-label {
+input[type="checkbox"]:checked {
+  border-color: #8848ef;
+  background-color: #8848ef;
+}
+
+.task-list input[type="checkbox"]:checked + label {
   text-decoration: line-through;
   opacity: 0.5;
 }

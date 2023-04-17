@@ -8,11 +8,6 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock head %}
 
-{% block js %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename='scripts.js') }}" async defer></script>
-{% endblock %}
-
 <body class="body" id="body-pd">
     <header class="header" id="header">
         <div class="header-toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
@@ -99,6 +94,11 @@
             </div>
         </div>
     </div>
+    {% endblock %}
+
+    {% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}" async defer></script>
     {% endblock %}
 
 </body>

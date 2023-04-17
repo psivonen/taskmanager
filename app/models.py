@@ -112,4 +112,5 @@ class TodoItems(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(255))
     list_id = db.Column(db.Integer, db.ForeignKey('todo_lists.id'), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
     todo_list = db.relationship('TodoList', backref='todo_items', lazy=True)
