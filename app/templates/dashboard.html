@@ -3,10 +3,31 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block page_content %}
-    <h1>Tervetuloa, {{ current_user.username }}!</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt ex aliquet interdum.
-        Aenean imperdiet dolor eros, non pretium justo consequat a. Sed laoreet nisl eu sem condimentum, ut lacinia
-        ligula condimentum. Duis ac vehicula felis, eu placerat tellus. Vestibulum lobortis ligula lorem, a egestas diam
-        scelerisque at. Quisque malesuada, justo et hendrerit tristique, mauris metus commodo felis, eu dignissim metus
-        nisi vel ex. Mauris accumsan ex nulla, vitae consequat elit convallis nec. </p>
+<h1>Tervetuloa, {{ current_user.username }}!</h1>
+<div class="container list-container">
+    <div class="row mb-3">
+        {% for todo_list in todo_lists %}
+        <div class="card px-0">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">{{ todo_list.list_name }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="todo-list">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ todo_list.progress }}%" aria-valuenow="{{ todo_list.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Edistyminen {{ todo_list.completed_tasks }} / {{ todo_list.total_tasks }}</p>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                {% if todo_list.due_date %}
+                <small>Deadline: {{ todo_list.due_date.strftime('%d.%m.%Y') }}</small>
+                {% endif %}
+                <a href="{{ url_for('main.tasks', list_id=todo_list['id']) }}" class="btn btn-primary btn-sm">Katso lista</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}

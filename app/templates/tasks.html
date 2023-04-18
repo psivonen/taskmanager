@@ -13,21 +13,30 @@
         <div class="card px-0">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">{{ list_name }}</h5>
-                <a href="{{ url_for('main.edit_list', list_id=list_info.id) }}" class="btn btn-sm btn-outline-secondary">Muokkaa</a>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-dark text-decoration-none" id="dropdownUser1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class='bx bx-dots-horizontal-rounded'></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
+                        <a class="dropdown-item" href="{{ url_for('main.edit_list', list_id=list_info.id) }}"
+                            class="btn btn-sm btn-outline-secondary">Muokkaa</a>
+                        <a class="dropdown-item delete-list" data-list-id="{{ list_info.id }}" href="#"
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Poista</a>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="card-text task-list">
-                    <form id="checklist-form" method="post">
                     {% for task in list_info.tasks %}
-                    <div class="form-check">
-                        <div class="item-list d-flex align-items-center">
-                            <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]" value="{{ task.id }}"
-                                id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if task.completed %}checked{% endif %}>
-                            <label class="form-check-label task-checkbox-label" for="task_{{ task.id }}">{{ task.task }}</label>
-                        </div>
+                    <div class="item-list d-flex">
+                        <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]"
+                            value="{{ task.id }}" id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if
+                            task.completed %}checked{% endif %}>
+                        <label class="form-check-label task-checkbox-label" for="task_{{ task.id }}">{{ task.task
+                            }}</label>
                     </div>
                     {% endfor %}
-                    </form>
                 </div>
             </div>
             {% if list_info.due_date %}
@@ -40,5 +49,24 @@
     </div>
 </div>
 
+<!-- Confirm Delete Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Vahvista poisto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Oletko varma, että haluat poistaa tämän tehtävälistan ja sen kaikki tehtävät?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Peruuta</button>
+                <button type="button" class="btn btn-danger confirm-delete-list-button">Poista</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

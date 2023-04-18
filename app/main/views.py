@@ -1,7 +1,7 @@
 from flask import render_template, request, current_app, redirect, url_for, flash, jsonify
 from . import main
 from flask_login import login_required, current_user
-from ..models import User, TodoList, TodoItems
+from ..models import TodoList, TodoItems
 from .. import db
 from datetime import datetime
 
@@ -9,21 +9,21 @@ from datetime import datetime
 def index():
     return render_template('index.html')
 
-@login_required
 @main.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
 @login_required
-@main.route('/users')
-def users():
-    # users = User.query.order_by(User.username).all()
-    page = request.args.get('page', 1, type=int)
-    pagination = User.query.order_by(User.username).paginate(
-        page=page, per_page=current_app.config['SM_ROWS_PER_PAGE'], 
-        error_out=False)
-    users = pagination.items
-    return render_template('users.html', users=users, pagination=pagination)
+def dashboard():
+    # get all todo lists for the current user
+    todo_lists = TodoList.query.filter_by(user_id=current_user.id).all()
+
+    # calculate number of tasks and completed tasks for each list
+    for todo_list in todo_lists:
+        total_tasks = len(todo_list.tasks)
+        completed_tasks = len([task for task in todo_list.tasks if task.completed])
+        todo_list.total_tasks = total_tasks
+        todo_list.completed_tasks = completed_tasks
+        todo_list.progress = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
+
+    return render_template('dashboard.html', todo_lists=todo_lists)
 
 
 @login_required
@@ -70,18 +70,34 @@ def tasks():
     return render_template('tasks.html', tasks_by_list=tasks_by_list)
 
 
+@login_required
 @main.route('/tasks/complete/<int:task_id>', methods=['POST'])
 def complete_task(task_id):
+    # Get the task object from the database
     task = TodoItems.query.get_or_404(task_id)
-    completed = request.json.get('completed')
-    if completed is not None:
-        task.completed = completed
-        db.session.commit()
-        return jsonify({'success': True})
+
+    # Update the completed status of the task based on the POST request data
+    task.completed = request.json['completed']
+
+    # Calculate the number of completed tasks and total tasks for the associated todo list
+    todo_list = task.todo_list
+    completed_tasks = sum(1 for task in todo_list.tasks if task.completed)
+    total_tasks = len(todo_list.tasks)
+
+    # Update the completed status of the associated todo list
+    if total_tasks > 0 and total_tasks == completed_tasks:
+        todo_list.completed = True
     else:
-        return jsonify({'success': False, 'error': 'Missing "completed" parameter'})
+        todo_list.completed = False
+
+    # Commit the changes to the database
+    db.session.commit()
+
+    # Return the updated task and associated todo list as JSON
+    return jsonify({'task': task.to_dict(), 'todo_list': todo_list.to_dict()})
 
 
+@login_required
 @main.route('/tasks/edit/<int:list_id>', methods=['GET', 'POST'])
 def edit_list(list_id):
     todo_list = TodoList.query.get_or_404(list_id)
@@ -109,7 +125,7 @@ def edit_list(list_id):
 
     return render_template('edit_list.html', todo_list=todo_list)
 
-
+@login_required
 @main.route('/tasks/delete/<int:task_id>', methods=['POST'])
 def delete_task(task_id):
     task = TodoItems.query.get_or_404(task_id)
@@ -117,4 +133,19 @@ def delete_task(task_id):
     db.session.commit()
     flash('Task deleted successfully')
     return redirect(url_for('main.edit_list', list_id=task.list_id))
+
+@login_required
+@main.route('/tasks/delete-list/<int:list_id>', methods=['DELETE'])
+def delete_list(list_id):
+    todo_list = TodoList.query.get_or_404(list_id)
+
+    # delete tasks associated with the list
+    for task in todo_list.tasks:
+        db.session.delete(task)
+
+    # delete the list itself
+    db.session.delete(todo_list)
+    db.session.commit()
+
+    return jsonify({'redirect': url_for('main.tasks')})
 

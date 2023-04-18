@@ -233,6 +233,11 @@ img {
   border-color:#999;
 }
 
+.confirm-delete-list-button {
+  border-radius: 25px;
+  padding: 8px 25px;
+}
+
 .custom-container {
   padding-top: 35px;
 }
@@ -297,6 +302,14 @@ input[type="checkbox"]:checked {
 
 .card-header {
   background-color: white;
+}
+
+.confirm-delete-list-button {
+  border-radius: 25px;
+}
+
+.progress-bar {
+  background-color: #8848ef;
 }
 
 @media screen and (max-width: 768px) {

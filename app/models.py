@@ -105,7 +105,20 @@ class TodoList(db.Model):
     list_name = db.Column(db.String(255))
     due_date = db.Column(db.Date, nullable=True, default=None)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
     tasks = db.relationship('TodoItems', backref='todo_lists', lazy=True)
+
+    def task_count(self):
+        return len(self.tasks)
+
+    def completed_task_count(self):
+        return len([task for task in self.tasks if task.completed])
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "completed": self.completed,
+        }
 
 class TodoItems(db.Model):
     __tablename__ = 'todo_items'
@@ -114,3 +127,10 @@ class TodoItems(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('todo_lists.id'), nullable=False)
     completed = db.Column(db.Boolean, default=False)
     todo_list = db.relationship('TodoList', backref='todo_items', lazy=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "completed": self.completed,
+            "list_id": self.list_id,
+        }
