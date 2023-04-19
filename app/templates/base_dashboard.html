@@ -17,10 +17,10 @@
                 {{ current_user.email }}
             </a>
             <div class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
-                <a class="dropdown-item" href="{{ url_for('auth.change_password') }}">Change Password</a>
-                <a class="dropdown-item" href="{{ url_for('auth.change_email_request') }}">Change Email</a>
+                <a class="dropdown-item" href="{{ url_for('auth.change_password') }}">Muuta salasana</a>
+                <a class="dropdown-item" href="{{ url_for('auth.change_email_request') }}">Muuta sähköpostiosoite</a>
                 <hr class="dropdown-divider">
-                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log Out</a>
+                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Kirjaudu ulos</a>
             </div>
         </div>
     </header>
@@ -39,7 +39,7 @@
                             class='bx bx-grid-alt nav-icon'></i> <span class="nav_name">Dashboard</span></a>
                     <a href="{{ url_for('main.tasks') }}"
                         class="nav-link-custom {{ 'custom-active' if request.endpoint == 'main.tasks' }}"><i
-                            class='bx bx-list-ul nav-icon'></i> <span class="nav_name">Tehtävälista</span></a>
+                            class='bx bx-list-ul nav-icon'></i> <span class="nav_name">Tehtävälistat</span></a>
                     <a href="#" class="nav-link-custom"><i class='bx bx-box nav-icon'></i> <span
                             class="nav-name">Arkisto</span></a>
                 </div>

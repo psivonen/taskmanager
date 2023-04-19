@@ -4,6 +4,7 @@
 
 {% block page_content %}
 <h1>Tervetuloa, {{ current_user.username }}!</h1>
+{% if has_lists %}
 <div class="container list-container">
     <div class="row mb-3">
         {% for todo_list in todo_lists %}
@@ -29,5 +30,10 @@
         {% endfor %}
     </div>
 </div>
+
+{% else %}
+  <p>Sinulla ei ole vielä tehtävälistoja...</p>
+  <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
+{% endif %}
 
 {% endblock %}

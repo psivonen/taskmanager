@@ -5,7 +5,7 @@ checkboxes.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {
     const taskId = checkbox.getAttribute("data-task-id");
     const isChecked = checkbox.checked;
-    fetch("/tasks/complete/" + taskId, {
+    fetch(`/tasks/complete/${taskId}`, {
       method: "POST",
       body: JSON.stringify({ completed: isChecked }),
       headers: {
@@ -20,12 +20,26 @@ checkboxes.forEach((checkbox) => {
       })
       .then((data) => {
         console.log(data);
+
+        // Update the completed status of the task checkbox
+        checkbox.checked = data.task.completed;
+
+        // Update the completed status of the task list
+        const taskList = checkbox.closest(".list");
+        if (data.todo_list.completed) {
+          taskList.classList.add("completed-list");
+          document.querySelector("#completed-lists").appendChild(taskList);
+        } else {
+          taskList.classList.remove("completed-list");
+          document.querySelector("#uncompleted-lists").appendChild(taskList);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   });
 });
+
 
 // get reference to delete list button
 const deleteListButtons = document.querySelectorAll(".delete-list");

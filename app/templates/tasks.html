@@ -6,48 +6,100 @@
 
 <h1>Tehtävälistat</h1>
 <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
-
+{% if has_lists %}
 <div class="container list-container">
-    <div class="row mb-3">
-        {% for list_name, list_info in tasks_by_list.items() %}
-        <div class="card px-0">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">{{ list_name }}</h5>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-dark text-decoration-none" id="dropdownUser1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class='bx bx-dots-horizontal-rounded'></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
-                        <a class="dropdown-item" href="{{ url_for('main.edit_list', list_id=list_info.id) }}"
-                            class="btn btn-sm btn-outline-secondary">Muokkaa</a>
-                        <a class="dropdown-item delete-list" data-list-id="{{ list_info.id }}" href="#"
-                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Poista</a>
+    <div class="row mb-3" id="uncompleted-lists">
+        <h2>Kesken olevat tehtävät</h2>
+        {% for list_name, list_info in uncompleted_tasks_by_list.items() %}
+            <div class="col-md-4 mb-4 list" id="{{ list_info.id }}">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">{{ list_name }}</h5>
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-dark text-decoration-none"
+                                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class='bx bx-dots-horizontal-rounded'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-light text-small shadow"
+                                aria-labelledby="dropdownUser1">
+                                <a class="dropdown-item" href="{{ url_for('main.edit_list', list_id=list_info.id) }}"
+                                    class="btn btn-sm btn-outline-secondary">Muokkaa</a>
+                                <a class="dropdown-item delete-list" data-list-id="{{ list_info.id }}" href="#"
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Poista</a>
+                            </div>
+                        </div>
                     </div>
+                    <div class="card-body">
+                        <div class="card-text task-list">
+                            {% for task in list_info.tasks %}
+                            <div class="item-list d-flex">
+                                <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]"
+                                    value="{{ task.id }}" id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if
+                                    task.completed %}checked{% endif %}>
+                                <label class="form-check-label task-checkbox-label" for="task_{{ task.id }}">{{
+                                    task.task }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if list_info.due_date %}
+                    <div class="card-footer">
+                        <small>Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</small>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-            <div class="card-body">
-                <div class="card-text task-list">
-                    {% for task in list_info.tasks %}
-                    <div class="item-list d-flex">
-                        <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]"
-                            value="{{ task.id }}" id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if
-                            task.completed %}checked{% endif %}>
-                        <label class="form-check-label task-checkbox-label" for="task_{{ task.id }}">{{ task.task
-                            }}</label>
+        {% endfor %}
+    </div>
+
+    <div class="row mb-3" id="completed-lists">
+        <h2>Valmiit</h2>
+        {% for list_name, list_info in completed_tasks_by_list.items() %}
+            <div class="col-md-4 mb-4 list" id="{{ list_info.id }}" >
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">{{ list_name }}</h5>
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-dark text-decoration-none"
+                                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class='bx bx-dots-horizontal-rounded'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-light text-small shadow"
+                                aria-labelledby="dropdownUser1">
+                                <a class="dropdown-item" href="{{ url_for('main.edit_list', list_id=list_info.id) }}"
+                                    class="btn btn-sm btn-outline-secondary">Muokkaa</a>
+                                <a class="dropdown-item delete-list" data-list-id="{{ list_info.id }}" href="#"
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Poista</a>
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
+                    <div class="card-body">
+                        <div class="card-text task-list">
+                            {% for task in list_info.tasks %}
+                            <div class="item-list d-flex">
+                                <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]"
+                                    value="{{ task.id }}" id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if
+                                    task.completed %}checked{% endif %}>
+                                <label class="form-check-label task-checkbox-label" for="task_{{ task.id }}">{{
+                                    task.task }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if list_info.due_date %}
+                    <div class="card-footer">
+                        <small>Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</small>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-            {% if list_info.due_date %}
-            <div class="card-footer">
-                <small>Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</small>
-            </div>
-            {% endif %}
-        </div>
         {% endfor %}
     </div>
 </div>
+
+{% else %}
+<p>Sinulla ei ole vielä tehtävälistoja...</p>
+{% endif %}
 
 <!-- Confirm Delete Modal -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"

@@ -23,7 +23,10 @@ def dashboard():
         todo_list.completed_tasks = completed_tasks
         todo_list.progress = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
 
-    return render_template('dashboard.html', todo_lists=todo_lists)
+    # Check if the user has any lists
+    has_lists = (len(todo_lists) > 0)
+
+    return render_template('dashboard.html', todo_lists=todo_lists, has_lists=has_lists)
 
 
 @login_required
@@ -58,16 +61,26 @@ def new_list():
 @main.route('/tasks')
 def tasks():
     # Query the current user's todo lists and associated tasks
-    todo_lists = TodoList.query.filter_by(user_id=current_user.id).all()
-    tasks = TodoItems.query.join(TodoList).filter(TodoList.user_id == current_user.id).all()
-    # Create a dictionary that maps todo list names to their associated tasks
-    tasks_by_list = {}
-    for todo_list in todo_lists:
-        tasks = [task for task in todo_list.tasks]
-        tasks_by_list[todo_list.list_name] = {'id': todo_list.id, 'tasks': tasks, 'due_date': todo_list.due_date}
+    completed_lists = TodoList.query.filter_by(user_id=current_user.id, completed=True).all()
+    uncompleted_lists = TodoList.query.filter_by(user_id=current_user.id, completed=False).all()
 
-    # Pass the dictionary to the template
-    return render_template('tasks.html', tasks_by_list=tasks_by_list)
+    # Create a dictionary that maps todo list names to their associated tasks
+    completed_tasks_by_list = {}
+    uncompleted_tasks_by_list = {}
+    
+    for todo_list in completed_lists:
+        tasks = [task for task in todo_list.tasks]
+        completed_tasks_by_list[todo_list.list_name] = {'id': todo_list.id, 'tasks': tasks, 'due_date': todo_list.due_date,}
+
+    for todo_list in uncompleted_lists:
+        tasks = [task for task in todo_list.tasks]
+        uncompleted_tasks_by_list[todo_list.list_name] = {'id': todo_list.id, 'tasks': tasks, 'due_date': todo_list.due_date,}
+
+    # Check if the user has any lists
+    has_lists = (len(completed_lists) > 0 or len(uncompleted_lists) > 0)
+
+    # Pass the dictionaries to the template
+    return render_template('tasks.html', completed_tasks_by_list=completed_tasks_by_list, uncompleted_tasks_by_list=uncompleted_tasks_by_list, has_lists=has_lists)
 
 
 @login_required

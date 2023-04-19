@@ -201,10 +201,6 @@ img {
     max-width: 100%;
 }
 
-.row {
-  gap: 30px;
-}
-
 .container {
   height: 95%;
 }
@@ -268,10 +264,6 @@ img {
   margin-bottom: 10px;
 }
 
-.row .mb-3 {
-  align-items: flex-start;
-}
-
 .list-container {
   margin: 40px 0;
 }
@@ -288,16 +280,6 @@ input[type="checkbox"]:checked {
 
 .form-check {
   line-height: 25px;
-}
-
-.task-container {
-  display: flex;
-  align-items: center;
-  width: 80%;
-}
-
-.card {
-  width: 30%;
 }
 
 .card-header {
