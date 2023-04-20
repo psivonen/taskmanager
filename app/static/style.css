@@ -7,6 +7,7 @@
 
 body {
   height: 100vh;
+  background-color: rgb(245, 245, 245);
 }
 
 .body {
@@ -14,6 +15,10 @@ body {
   margin: 3rem 0 0 0;
   padding: 0 1rem;
   transition: 0.5s;
+}
+
+.index-body {
+  background-color: white;
 }
 
 .nav-list a, 
@@ -37,7 +42,7 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(245, 245, 245);
   z-index: 100;
   transition: 0.5s;
 }
@@ -269,8 +274,8 @@ img {
 }
 
 input[type="checkbox"]:checked {
-  border-color: #8848ef;
-  background-color: #8848ef;
+  border-color: #222222;
+  background-color: #222222;
 }
 
 .task-list input[type="checkbox"]:checked + label {
@@ -278,41 +283,95 @@ input[type="checkbox"]:checked {
   opacity: 0.5;
 }
 
-.form-check {
-  line-height: 25px;
+.task-list input[type="checkbox"],
+.task-list label {
+  vertical-align: middle;
+  line-height: 2;
+}
+
+.task-checkbox-label {
+  max-width: 80%; /* set a max-width for the label */
+}
+
+.card {
+  border-radius: 15px;
+  border-color: transparent;
+  box-shadow: 0 2px 20px #e7e7e7;
 }
 
 .card-header {
   background-color: white;
+  border: none;
+  padding-top: 15px;
+}
+
+.card-body {
+  padding-top: 0;
+}
+
+.card-header:first-child {
+  border-radius: 15px 15px 0 0;
+}
+
+.card-footer:last-child {
+  border-radius: 0 0 15px 15px;
+}
+
+.card-footer {
+  border: none;
+  background-color: #222222;
+  color: white;
+}
+
+.card-title {
+  font-size: 1.1rem;
 }
 
 .confirm-delete-list-button {
   border-radius: 25px;
 }
 
+.progress, .progress-bar {
+  height: 10px;
+}
+
 .progress-bar {
   background-color: #8848ef;
+}
+
+.lists-h {
+  padding-bottom: 15px;
+  font-family: 'Montserrat';
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.badge {
+  margin-top: 8px;
+  background-color: #8848ef !important;
+}
+
+.card-progress {
+  padding-top: 10px;
 }
 
 @media screen and (max-width: 768px) {
   h1 {
     font-size: 28px;
   }
-  .row {
-    gap: 20px;
-  }
 
   .container {
     padding: 20px;
   }
 
-  .card {
-    width: 100%;
+  img {
+    padding-top: 20px;
   }
-  
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 968px) {
   .body {
     margin: calc(3rem + 1rem) 0 0 0;
     padding-left: calc(68px + 2rem);
@@ -344,4 +403,5 @@ input[type="checkbox"]:checked {
   .body-pd {
     padding-left: calc(68px + 188px);
   }
+
 }

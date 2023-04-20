@@ -28,10 +28,16 @@ checkboxes.forEach((checkbox) => {
         const taskList = checkbox.closest(".list");
         if (data.todo_list.completed) {
           taskList.classList.add("completed-list");
-          document.querySelector("#completed-lists").appendChild(taskList);
+          const completedLists = document.querySelector("#completed-lists");
+          if (!completedLists.contains(taskList)) {
+            completedLists.appendChild(taskList);
+          }
         } else {
           taskList.classList.remove("completed-list");
-          document.querySelector("#uncompleted-lists").appendChild(taskList);
+          const uncompletedLists = document.querySelector("#uncompleted-lists");
+          if (!uncompletedLists.contains(taskList)) {
+            uncompletedLists.appendChild(taskList);
+          }
         }
       })
       .catch((error) => {
@@ -39,7 +45,6 @@ checkboxes.forEach((checkbox) => {
       });
   });
 });
-
 
 // get reference to delete list button
 const deleteListButtons = document.querySelectorAll(".delete-list");

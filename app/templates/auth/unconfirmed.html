@@ -1,20 +1,20 @@
 {% extends "base_dashboard.html" %}
 
-{% block title %}TaskManager - Confirm your account{% endblock %}
+{% block title %}TaskManager - Vahvista tilisi{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
     <h1>
-        Hello, {{ current_user.username }}!
+        Tervetuloa, {{ current_user.username }}!
     </h1>
-    <h3>You have not confirmed your account yet.</h3>
+    <h3>Et ole vielä vahvistanut tiliäsi.</h3>
     <p>
-        Before you can access this site you need to confirm your account.
-        Check your inbox, you should have received an email with a confirmation link.
+        Ennen kuin pääset luomaan listoja tälle sivustolle, sinun on vahvistettava tilisi.
+        Tarkista postilaatikkosi, sinun olisi pitänyt saada sähköpostiviesti, jossa on vahvistuslinkki.
     </p>
     <p>
-        Need another confirmation email?
-        <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
+        Tarvitsetko uuden vahvistusviestin?
+        <a href="{{ url_for('auth.resend_confirmation') }}">Klikkaa tästä.</a>
     </p>
 </div>
 {% endblock %}

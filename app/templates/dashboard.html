@@ -6,25 +6,32 @@
 <h1>Tervetuloa, {{ current_user.username }}!</h1>
 {% if has_lists %}
 <div class="container list-container">
-    <div class="row mb-3">
+    <div class="row mb-3 flex-sm-row">
         {% for todo_list in todo_lists %}
-        <div class="card px-0">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">{{ todo_list.list_name }}</h5>
-            </div>
-            <div class="card-body">
-                <div class="todo-list">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ todo_list.progress }}%" aria-valuenow="{{ todo_list.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <p>Edistyminen {{ todo_list.completed_tasks }} / {{ todo_list.total_tasks }}</p>
+        <div class="col-sm-4 mb-4">
+            <div class="card px-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">{{ todo_list.list_name }}<br>
+                        {% if todo_list.due_date %}
+                        <span class="badge bg-dark">Deadline: {{ todo_list.due_date.strftime('%d.%m.%Y') }}</span>
+                        {% endif %}
+                    </h5>
                 </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center">
-                {% if todo_list.due_date %}
-                <small>Deadline: {{ todo_list.due_date.strftime('%d.%m.%Y') }}</small>
-                {% endif %}
-                <a href="{{ url_for('main.tasks', list_id=todo_list['id']) }}" class="btn btn-primary btn-sm">Katso lista</a>
+                <div class="card-body card-progress">
+                    <div class="card-text">
+                        <div class="todo-list">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ todo_list.progress }}%"
+                                    aria-valuenow="{{ todo_list.progress }}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                            <p><i class="fa-solid fa-list-check"></i> Edistyminen {{ todo_list.completed_tasks }} / {{
+                                todo_list.total_tasks }}</p>
+                        </div>
+                        <a href="{{ url_for('main.tasks', list_id=todo_list['id']) }}"
+                            class="btn btn-dark btn-sm">Katso lista</a>
+                    </div>
+                </div>
             </div>
         </div>
         {% endfor %}
@@ -32,8 +39,8 @@
 </div>
 
 {% else %}
-  <p>Sinulla ei ole vielä tehtävälistoja...</p>
-  <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
+<p>Sinulla ei ole vielä tehtävälistoja...</p>
+<button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
 {% endif %}
 
 {% endblock %}

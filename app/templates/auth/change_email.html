@@ -1,11 +1,11 @@
 {% extends "base_dashboard.html" %}
 {% import "bootstrap5/form.html" as wtf %}
 
-{% block title %}Sovellusmalli - Change Email Address{% endblock %}
+{% block title %}TaskManager - Muuta sähköpostiosoite{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Change Your Email Address</h1>
+    <h1>Muuta sähköpostiosoite</h1>
 </div>
 <div class="col-md-4">
     {{ wtf.render_form(form, extra_classes='needs-validation', novalidate=True) }}

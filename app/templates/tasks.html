@@ -8,13 +8,18 @@
 <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Uusi tehtävälista</button>
 {% if has_lists %}
 <div class="container list-container">
-    <div class="row mb-3" id="uncompleted-lists">
-        <h2>Kesken olevat tehtävät</h2>
-        {% for list_name, list_info in uncompleted_tasks_by_list.items() %}
-            <div class="col-md-4 mb-4 list" id="{{ list_info.id }}">
+    <div class="row mb-3">
+        <div class="col" id="uncompleted-lists">
+            <h4 class="lists-h">Työn alla</h4>
+            {% for list_name, list_info in uncompleted_tasks_by_list.items() %}
+            <div class="col mb-4 list" id="{{ list_info.id }}">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">{{ list_name }}</h5>
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title mb-0">{{ list_name }}<br>
+                        {% if list_info.due_date %}
+                            <span class="badge bg-dark">Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</span>
+                        {% endif %}
+                        </h5>
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-dark text-decoration-none"
                                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,7 +37,7 @@
                     <div class="card-body">
                         <div class="card-text task-list">
                             {% for task in list_info.tasks %}
-                            <div class="item-list d-flex">
+                            <div class="task">
                                 <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]"
                                     value="{{ task.id }}" id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if
                                     task.completed %}checked{% endif %}>
@@ -42,23 +47,22 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {% if list_info.due_date %}
-                    <div class="card-footer">
-                        <small>Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</small>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
 
-    <div class="row mb-3" id="completed-lists">
-        <h2>Valmiit</h2>
-        {% for list_name, list_info in completed_tasks_by_list.items() %}
-            <div class="col-md-4 mb-4 list" id="{{ list_info.id }}" >
+        <div class="col" id="completed-lists">
+            <h4 class="lists-h">Valmiit</h4>
+            {% for list_name, list_info in completed_tasks_by_list.items() %}
+            <div class="col mb-4 list" id="{{ list_info.id }}">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">{{ list_name }}</h5>
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title mb-0">{{ list_name }}<br>
+                        {% if list_info.due_date %}
+                            <span class="badge text-bg-dark">Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</span>
+                        {% endif %}
+                        </h5>
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-dark text-decoration-none"
                                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,9 +78,12 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        {% if list_info.due_date %}
+                        <span class="badge text-bg-dark">Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</span>
+                        {% endif %}
                         <div class="card-text task-list">
                             {% for task in list_info.tasks %}
-                            <div class="item-list d-flex">
+                            <div class="task">
                                 <input class="task-checkbox form-check-input me-2" type="checkbox" name="tasks[]"
                                     value="{{ task.id }}" id="task_{{ task.id }}" data-task-id="{{ task.id }}" {% if
                                     task.completed %}checked{% endif %}>
@@ -86,39 +93,34 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {% if list_info.due_date %}
-                    <div class="card-footer">
-                        <small>Deadline: {{ list_info.due_date.strftime('%d.%m.%Y') }}</small>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 
-{% else %}
-<p>Sinulla ei ole vielä tehtävälistoja...</p>
-{% endif %}
+    {% else %}
+    <p>Sinulla ei ole vielä tehtävälistoja...</p>
+    {% endif %}
 
-<!-- Confirm Delete Modal -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Vahvista poisto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Oletko varma, että haluat poistaa tämän tehtävälistan ja sen kaikki tehtävät?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Peruuta</button>
-                <button type="button" class="btn btn-danger confirm-delete-list-button">Poista</button>
+    <!-- Confirm Delete Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Vahvista poisto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Oletko varma, että haluat poistaa tämän tehtävälistan ja sen kaikki tehtävät?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Peruuta</button>
+                    <button type="button" class="btn btn-danger confirm-delete-list-button">Poista</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
+    {% endblock %}
