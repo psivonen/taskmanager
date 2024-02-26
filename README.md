@@ -1,5 +1,7 @@
 # Task management tool
 
+![taskmanager-1](https://github.com/psivonen/taskmanager/assets/44951778/bc3e1bfb-b861-4b6c-8e24-285b3009a2cc)
+
 ### Description
 The project is based on the source code examples of the book Flask Web Development (second edition) by Miguel Grinberg. The purpose was to create a user-friendly Task Management system designed to improve productivity. The goal of this project was to create a clear platform that facilitates the efficient organization, tracking and completion of tasks by individuals. For me, the purpose of the project was to learn Flask and develop my current skills.
 
