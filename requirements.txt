@@ -24,7 +24,7 @@ Mako==1.2.4
 MarkupSafe==2.1.2
 packaging==23.0
 pycodestyle==2.10.0
-PyMySQL==1.0.3
+PyMySQL==1.1.1
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 python-editor==1.0.3
